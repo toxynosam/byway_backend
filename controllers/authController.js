@@ -12,6 +12,8 @@ const signup = async (req, res) => {
           $or: [{ username }, {email} ],
         });
     
+
+        // so now we check, if the user exists, we return a response dynamic enough to tell us if it's user name or password
         if (existingUser) {
           if (existingUser.username === username) {
             return res
@@ -91,7 +93,7 @@ const signup = async (req, res) => {
           expiresIn: "1d",
         });
     
-        // return success response
+        // return success response with token
         res.json({
           success: true,
           token,
@@ -112,72 +114,6 @@ const signup = async (req, res) => {
     module.exports = { signup, signin };
 
 
-
-
-
-
-
-
-
-
-
-//     const signin = async (req, res) => {
-//       try {
-//           // Get the data from the request body
-//           const { email, password } = req.body;
-  
-//           // Debugging: Log the email and password from the request
-//           console.log("Email from Request:", email);
-//           console.log("Password from Request:", password);
-  
-//           // Find the user by email
-//           const user = await User.findOne({ email: email.trim().toLowerCase() });
-//           console.log("User Found:", user);
-  
-//           if (!user) {
-//               return res
-//                   .status(400)
-//                   .json({ success: false, message: "Invalid Email Or Password" });
-//           }
-  
-//           // Debugging: Log the hashed password from the database
-//           console.log("Hashed Password from DB:", user.password);
-  
-//           // Compare passwords
-//           const isMatch = await bcrypt.compare(password.trim(), user.password);
-//           console.log("Password Match:", isMatch);
-  
-//           if (!isMatch) {
-//               return res
-//                   .status(400)
-//                   .json({ success: false, message: "Invalid Email Or Password" });
-//           }
-  
-//           // Generate token
-//           const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-//               expiresIn: "1d",
-//           });
-//           console.log("Token Generated:", token);
-  
-//           // Return success response
-//           res.json({
-//               success: true,
-//               token,
-//               user: {
-//                   id: user._id,
-//                   firstName: user.firstName,
-//                   lastName: user.lastName,
-//                   username: user.username,
-//                   email: user.email,
-//               },
-//           });
-//       } catch (error) {
-//           console.log("Signin Error:", error);
-//           res.status(500).json({ message: "Server error during login" });
-//       }
-//   };
-
-// module.exports = {signup, signin};
 
 
 
