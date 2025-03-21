@@ -25,9 +25,7 @@ const signup = async (req, res) => {
           }
         }
     
-        // Hash the password before saving
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        
         
         // Create new user with hashed password
         const newUser = new User({ 
@@ -35,7 +33,7 @@ const signup = async (req, res) => {
             lastName, 
             username, 
             email, 
-            password: hashedPassword // Save the hashed password
+            password
         });
         await newUser.save();
     
@@ -48,12 +46,11 @@ const signup = async (req, res) => {
             lastName: newUser.lastName,
             username: newUser.username,
             email: newUser.email,
-            // Don't return the password
           },
         });
       } catch (error) {
         console.log("Signup Error:", error.message); // Log more details
-        res.status(500).json({ message: "Error signing up users" });
+        res.status(500).json({status:false, message: "Error signing up users" });
       }
 };
 
