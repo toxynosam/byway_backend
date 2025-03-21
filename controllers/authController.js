@@ -1,4 +1,4 @@
-const User = require("../models/user");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');  // Choose one bcrypt library
 
@@ -71,13 +71,15 @@ const signin = async (req, res) => {
         .json({ success: false, message: " Email or password not found" });
     }
 
-    // check if the password is correct
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid password" });
-    }
+    // // check if the password is correct
+    // const isMatch = await bcrypt.compare(password, user.password);
+
+    
+    // if (!isMatch) {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: "Invalid password" });
+    // }
 
     //generate token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {

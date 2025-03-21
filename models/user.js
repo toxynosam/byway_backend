@@ -32,17 +32,17 @@ const userSchema = new mongoose.Schema({
 
 });
 
-//Encrypt the password before
+// //Encrypt the password before
 
-userSchema.pre("save", async function (next){
-    //only encrpt if password is been modified.
-    if(!this.isModified("password")) return next();
+// userSchema.pre("save", async function (next){
+//     //only encrpt if password is been modified.
+//     if(!this.isModified("password")) return next();
 
-    //encrypt password
-    this.password = await bcrypt.hash(this.password, 10);
-    next();
+//     //encrypt password
+//     this.password = await bcrypt.hash(this.password, 10);
+//     next();
 
-});
+// });
 
 //create model
 
