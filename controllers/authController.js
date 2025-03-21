@@ -68,7 +68,7 @@ const signin = async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid email or password" });
+        .json({ success: false, message: " Email or password not found" });
     }
 
     // check if the password is correct
@@ -76,7 +76,7 @@ const signin = async (req, res) => {
     if (!isMatch) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid email or password" });
+        .json({ success: false, message: "Invalid password" });
     }
 
     //generate token
@@ -90,9 +90,6 @@ const signin = async (req, res) => {
       token,
       user: {
         id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        username: user.username,
         email: user.email,
       },
     });
