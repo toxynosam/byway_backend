@@ -60,44 +60,60 @@ const signup = async (req, res) => {
 const signin = async (req, res) => {
   try {
     // Get the data from the request body (coming from the frontend)
-    const { email, password } = req.body;
+    const { email, username, password } = req.body;
 
-    // find the user by their email
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res
-        .status(400)
-        .json({ success: false, message: " Email or password not found" });
+    if(!username && !email){
+      return res.status(400).json({
+        success:false,
+        message: "Please provide a username or email"
+      })
     }
 
-    // // check if the password is correct
-    // const isMatch = await bcrypt.compare(password, user.password);
+    const user = await User.findOne({
+      $or:[{username}, {email}]
+    })
 
-    
-    // if (!isMatch) {
-    //   return res
-    //     .status(400)
-    //     .json({ success: false, message: "Invalid password" });
-    // }
+    if(!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid username or email"
+      })
+    }
 
-    //generate token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const isMatch = await user.comparePassword(password)
 
-    // return success response with token
-    res.json({
-      success: true,
-      token,
-      user: {
-        id: user._id,
-        email: user.email,
+    if(!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Password incorrect"
+      })
+    }
+
+    const token = jwt.sign(
+      {
+        userId: user._id,
+        username: user.username,
+        email:user.email
       },
-    });
+      process.env.JWT_SECRET, 
+      {
+        expiresIn:"3d"
+      }
+    )
+
+    res.status(200).json({
+      success:true,
+      message: "Login Successful",
+      token,
+      user:{
+        id:user._id,
+        username:user.username,
+        email:user.email
+      }
+    })
   } catch (error) {
     console.log("Signin Error:", error.message);
-    res.status(500).json({ message: "Server error during login" });
+    res.status(500).json({success:false, message: "Server error during login" });
   }
 };
     

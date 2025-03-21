@@ -10,6 +10,7 @@ const signupValidationRules = [
     .withMessage("First name must be alphabetic")
     .isLength({ min: 2, max: 30 })
     .withMessage("First name must be between 2 and 30 characters"),
+
   body("lastname")
     .trim()
     .notEmpty()
@@ -27,6 +28,8 @@ const signupValidationRules = [
     .withMessage("Username must be alphanumeric")
     .isLength({ min: 3, max: 30 })
     .withMessage("Username must be between 3 and 30 characters"),
+
+
   body("email")
     .trim()
     .notEmpty()
@@ -50,6 +53,8 @@ const signinValidationRules = [
     .withMessage("Email is required")
     .isEmail()
     .withMessage("Invalid email address"),
+
+    
   body("username").trim().notEmpty().withMessage("Username Required"),
 
   body("password").trim().notEmpty().withMessage("Password Required"),

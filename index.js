@@ -2,13 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const bcrypt = require('bcrypt');
 const authRoutes = require("./routes/auth");
 const errorHandler = require("./middlewares/errorHandler");
 const rateLimit = require("express-rate-limit");
 
 //Initializing an express app
-
 const app = express();
 
 // Configure middlewares with open CORS
@@ -21,21 +19,14 @@ app.use(
 
 app.use(express.json());
 
-
-//Setting up the  middleware
-
-app.use(cors());
-
-const authLimiter = rateLimit({
+const rateLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, 
     max: 100, 
     message: "Too many requests, please try again later.",
   });
   
-  
-
 //routes - this is where your entry point file i.e index maps the route/endpoint
-app.use("/api/auth", authLimiter);
+app.use("/api/auth", rateLimiter);
 app.use("/api/auth", authRoutes);
 app.use(errorHandler);
 
@@ -61,7 +52,6 @@ mongoose
 });
 
 //start the node.js server
-
 const  PORT = process.env.PORT || 3003;
 
 app.listen(PORT, () => {
